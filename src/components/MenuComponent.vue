@@ -1,10 +1,13 @@
 <template>
-    <ul class="menu">
+    <ul class="menu m-0">
       <li>
-        <router-link to="/admin/products" class="menu-link" active-class="active">📦 Quản lý sách</router-link>
+        <router-link to="/admin/products" class="menu-link" active-class="active"><i class="bi bi-book"></i> Quản lý sách</router-link>
       </li>
       <li>
-        <router-link to="/admin/users" class="menu-link" active-class="active">👤 Quản lý người dùng</router-link>
+        <router-link to="/admin/users" class="menu-link" active-class="active"><i class="bi bi-person"></i> Quản lý người dùng</router-link>
+      </li>
+      <li>
+        <router-link to="/admin/nxb" class="menu-link" active-class="active"><i class="bi bi-building"></i> Quản lý NXB</router-link>
       </li>
     </ul>
   </template>
@@ -46,7 +49,6 @@
   .menu-link.active {
     background: #ffc107;
     color: #333;
-    font-weight: bold;
   }
   </style>
   

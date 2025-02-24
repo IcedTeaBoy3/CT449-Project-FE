@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="footer mt-5">
       <div class="container">
         <div class="footer-content">
           <!-- Cột 1: Giới thiệu -->
@@ -12,10 +12,10 @@
           <div class="footer-column">
             <h5>Liên Kết Nhanh</h5>
             <ul class="footer-links">
-              <li><router-link to="/">🏠 Trang chủ</router-link></li>
-              <li><router-link to="/about">📖 Giới thiệu</router-link></li>
-              <li><router-link to="/contact">✉️ Liên hệ</router-link></li>
-              <li><router-link to="/admin">🔧 Quản trị</router-link></li>
+              <li><router-link to="/"><i class="bi bi-house-door"></i> Trang chủ</router-link></li>
+              <li><router-link to="/about"><i class="bi bi-book"></i> Giới thiệu</router-link></li>
+              <li><router-link to="/contact"><i class="bi bi-envelope"></i> Liên hệ</router-link></li>
+
             </ul>
           </div>
   

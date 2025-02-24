@@ -11,7 +11,8 @@ import MenuComponent from '../components/MenuComponent.vue';
                 <MenuComponent />
             </div>
             <div class="col-8 col-md-10 bg-light p-0">
-                <router-view />
+
+                <router-view></router-view>
             </div>
         </div>
     </div>

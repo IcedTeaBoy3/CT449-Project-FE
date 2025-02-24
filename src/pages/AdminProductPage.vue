@@ -7,14 +7,15 @@ const products = ref([]);
 
 onMounted(async () => {
     const response = await ProductService.getAllProducts();
-    products.value = response.data; // Lấy mảng data thay vì toàn bộ object
-    console.log('products', products.value);
+    if(response?.data){
+        products.value = response?.data || [];
+    } // ✅ Nếu không có dữ liệu thì gán mảng rỗng
 });
 </script>
 
 <template>
     <div class="p-3">
-        <h4 class="fw-bold mb-3 border-bottom border-primary">Quản lý sách</h4>
+        <h4 class="fw-bold mb-3 border-bottom border-primary text-capitalize">Quản lý sách</h4>
         <button class="btn btn-primary mb-3">
             <i class="bi bi-plus-lg"></i> Thêm sách
         </button>
@@ -46,9 +47,9 @@ onMounted(async () => {
                             </button>
                         </td>
                     </tr>
-                    <tr v-if="products.length === 0">
+                    <!-- <tr v-if="products.length == 0">
                         <td colspan="6" class="text-center text-secondary">Không có dữ liệu</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
