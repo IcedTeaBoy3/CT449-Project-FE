@@ -44,7 +44,7 @@
   .footer {
     background: linear-gradient(to right, #007bff, #0056b3);
     color: white;
-    padding: 40px 0;
+    padding: 15px 0;
     font-size: 16px;
   }
   

@@ -5,6 +5,8 @@ import AdminProductPage from '../pages/AdminProductPage.vue';
 import AdminUserPage from '../pages/AdminUserPage.vue';
 import NotFoundPage from '../pages/NotFoundPage.vue';
 import AdminNXBPage from '../pages/AdminNXBPage.vue';
+import HomePage from '../pages/HomePage.vue';
+import ProductDetailPage from '../pages/ProductDetailPage.vue';
 // Định nghĩa các route
 const routes = [
   {
@@ -25,6 +27,15 @@ const routes = [
         component: AdminNXBPage,
       }
     ]
+    
+  },
+  {
+    path: '/',
+    component: HomePage,
+  },
+  {
+    path: '/product-detail/:id',
+    component: ProductDetailPage,
   },
 
   {

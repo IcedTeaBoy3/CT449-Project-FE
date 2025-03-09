@@ -4,20 +4,25 @@ import { defineProps, defineEmits, ref, watch } from 'vue';
 const props = defineProps({
     title: String,
     visible: Boolean,
-    nxb: Object, // Dữ liệu nhà xuất bản cần sửa
+    columns: Array, // Danh sách các cột (label và key)
+    rules: Object, // Quy tắc validation
+    object: Object, // Dữ liệu nhà xuất bản cần sửa
 });
 
 const emit = defineEmits(['close', 'save']);
 
 // Sao chép dữ liệu để chỉnh sửa mà không ảnh hưởng đến prop gốc
-const editedNXB = ref(props.nxb ? { ...props.nxb } : { MaNXB: '', TenNXB: '', DiaChi: '' });
+const editedObject = ref({ ...props.object });
 
 
-// Theo dõi khi prop thay đổi thì cập nhật lại dữ liệu
-watch(() => props.nxb, (newValue) => {
-    editedNXB.value = newValue ? { ...newValue } : { MaNXB: '', TenNXB: '', DiaChi: '' };
-    clearErrors();
-});
+// Theo dõi props.object để cập nhật editedObject khi dữ liệu thay đổi
+watch(
+    () => props.object,
+    (newValue) => {
+        editedObject.value = { ...newValue }; // Cập nhật bản sao mới mỗi khi object thay đổi
+    },
+    { deep: true, immediate: true } // immediate: chạy ngay khi component được tạo
+);
 
 
 // Đóng drawer
@@ -28,50 +33,49 @@ const closeDrawer = () => {
 // Lưu dữ liệu đã chỉnh sửa
 const saveChanges = () => {
     if (validateForm()) {
-        emit('save', editedNXB.value);
+        emit('save', editedObject.value);
         closeDrawer();
-    }
-    else{
+    } else {
         console.log('Lỗi');
     }
 };
 // Lưu các lỗi validation
-const errors = ref({
-    MaNXB: '',
-    TenNXB: '',
-    DiaChi: ''
+const errors = ref({});
+props.columns.forEach(col => {
+    errors.value[col.key] = '';
 });
 // Xóa các thông báo lỗi
 const clearErrors = () => {
-    errors.value = {
-        MaNXB: '',
-        TenNXB: '',
-        DiaChi: ''
-    };
+    for (let key in errors.value) {
+        errors.value[key] = '';
+    }
 };
-
-// Kiểm tra dữ liệu trước khi lưu
+// ✅ Hàm validate cho từng trường với nhiều rule
+const validateField = (key, value) => {
+    const fieldRules = props.rules[key] || [];
+    for (const rule of fieldRules) {
+        const result = rule(value);
+        if (result !== true) {
+            errors.value[key] = result; // Nếu có lỗi thì gán thông báo và dừng lại
+            return false;
+        }
+    }
+    return true;
+};
+// ✅ Validate tất cả các trường
 const validateForm = () => {
     clearErrors();
     let isValid = true;
 
-    if (!editedNXB.value.MaNXB.trim()) {
-        errors.value.MaNXB = 'Vui lòng nhập mã NXB!';
-        isValid = false;
-    }
-
-    if (!editedNXB.value.TenNXB.trim()) {
-        errors.value.TenNXB = 'Vui lòng nhập tên NXB!';
-        isValid = false;
-    }
-
-    if (!editedNXB.value.DiaChi.trim()) {
-        errors.value.DiaChi = 'Vui lòng nhập địa chỉ!';
-        isValid = false;
-    }
+    props.columns.forEach(col => {
+        if (!validateField(col.key, editedObject.value[col.key])) {
+            isValid = false;
+        }
+    });
 
     return isValid;
 };
+
 
 </script>
 
@@ -83,7 +87,7 @@ const validateForm = () => {
                 <button type="button" class="btn-close" @click="closeDrawer"></button>
             </div>
             <div class="drawer-body">
-                <slot :editedNXB="editedNXB" :errors="errors"></slot>
+                <slot :editedObject="editedObject" :errors="errors"></slot>
             </div>
             <div class="drawer-footer">
                 <button type="button" class="btn btn-secondary" @click="closeDrawer">Hủy</button>

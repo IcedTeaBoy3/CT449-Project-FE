@@ -1,58 +1,69 @@
-<script>
-export default {
-  data() {
-    return {
-      isDropdownVisible: false,
-      avatarUrl: '/images/default-avatar.png', // Thay bằng đường dẫn ảnh thật của bạn
-    };
-  },
-  methods: {
-    toggleDropdown(event) {
-      event.stopPropagation(); // Ngăn sự kiện lan ra ngoài
-      this.isDropdownVisible = !this.isDropdownVisible;
-    },
-    closeDropdown() {
-      this.isDropdownVisible = false;
-    },
-  },
-  mounted() {
-    document.addEventListener('click', () => {
-      this.closeDropdown();
-    });
-  },
+<script setup>
+import { ref } from 'vue';
+import { useProductStore } from '../stores/ProductStore';
+
+const avatarUrl = '/logo.png';
+const productStore = useProductStore();
+const searchQuery = ref(''); 
+
+const handleOnChangeSearchQuery = () => {
+  productStore.setSearchQuery(searchQuery.value);
 };
+
 </script>
 <template>
-  <header class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm border-bottom">
+  <header class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm border-bottom fixed-top ">
     <div class="container d-flex justify-content-between align-items-center">
       <!-- Logo và Tên Website -->
       <router-link to="/" class="navbar-brand d-flex align-items-center">
         <img src="/logo.png" alt="Vue logo" class="logo" />
         <span class="brand-text">Thư viện Online</span>
       </router-link>
+      <!-- input tìm kiếm -->
+      <div class="col-md-6">
+        <div class="input-group">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Tìm kiếm..." 
+            @change="handleOnChangeSearchQuery"
+            v-model="searchQuery"
+          />
+          <button class="btn btn-primary" type="button">
+            <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
+          </button>
+        </div>
+      </div>
+
+
+      
 
       <!-- Menu Điều Hướng -->
       <nav class="nav">
-        <div class="nav-avatar" @click="toggleDropdown">
-          <img :src="avatarUrl" alt="Avatar" class="avatar-img" />
-          <span>Nguyễn Văn A</span>
-        </div>
+        <div class="dropdown">
+          <!-- Avatar và tên người dùng -->
+          <button class="btn text-white dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img :src="avatarUrl" alt="Avatar" class="avatar-img me-2" />
+            <span>Nguyễn Văn A</span>
+          </button>
 
-        <!-- Popup Dropdown -->
-        <div v-if="isDropdownVisible" class="dropdown-menu">
-         
-          <router-link to="/login" class="dropdown-item">Đăng xuất</router-link>
+          <!-- Dropdown Menu -->
+          <ul class="dropdown-menu">
+            <li><router-link to="/profile" class="dropdown-item">Thông tin cá nhân</router-link></li>
+            <li><router-link to="/my-books" class="dropdown-item">Sách đã mượn</router-link></li>
+            <li><router-link to="/admin" class="dropdown-item">Quản lý hệ thống</router-link></li>
+            <li><router-link to="/logout" class="dropdown-item">Đăng xuất</router-link></li>
+          </ul>
         </div>
       </nav>
     </div>
   </header>
 </template>
 
-<style scoped>
+<style>
 /* Header */
 header {
   background: linear-gradient(to right, #007bff, #0056b3);
-  padding: 15px 0;
 }
 
 /* Logo */
@@ -80,63 +91,34 @@ header {
 /* Menu Điều Hướng */
 .nav {
   display: flex;
+  position: relative;
   align-items: center;
   position: relative;
   gap: 15px;
 }
 
-/* Ảnh đại diện */
-.nav-avatar {
+/* Avatar */
+.avatar-img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid white;
-  transition: all 0.3s;
-}
-
-.nav-avatar:hover {
-  border-color: #ffd700;
-}
-
-.avatar-img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
+  border: 1px solid white;
 }
 
-/* Dropdown Menu */
+
 .dropdown-menu {
-  position: absolute;
-  top: 50px;
-  right: 0;
-  width: 160px;
-  background-color: #fff;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-  overflow: hidden;
-}
-
-.dropdown-item {
-  display: block;
-  padding: 12px 15px;
-  color: #333;
-  text-decoration: none;
-  font-size: 14px;
-  transition: background 0.3s, color 0.3s;
+  padding: 6px;
+  min-width: 160px;
 }
 
 .dropdown-item:hover {
-  background-color: #007bff;
-  color: white;
+  background-color: #ccc;
 }
-
 /* Active Link */
 .router-link-exact-active {
-  color: #007bff;
+  color: white;
+  background: #007bff;
   font-weight: bold;
 }
 </style>

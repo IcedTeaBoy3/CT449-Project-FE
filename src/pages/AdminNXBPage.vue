@@ -54,9 +54,9 @@ const showNotification = (message, type) => {
 // Xác nhận xóa
 const handleConfirmDelete = async () => {
     try {
-        await NXBService.deleteNXB(comfirmDialog.value.id);
+        const result = await NXBService.deleteNXB(comfirmDialog.value.id);
         nxbs.value = nxbs.value.filter((nxb) => nxb._id !== comfirmDialog.value.id);
-        showNotification('Xóa thành công!', 'success');
+        showNotification(result.message, result.status);
     } catch (error) {
         console.error('Lỗi khi xóa NXB:', error);
         showNotification('Xóa thất bại!', 'error');
@@ -119,7 +119,7 @@ const saveNXB = async (updatedNXB) => {
         if (response?.status === 'success') {
             const index = nxbs.value.findIndex((nxb) => nxb._id === updatedNXB._id); // ✅ Đổi id thành _id
             if (index !== -1) {
-                Object.assign(nxbs.value[index], updatedNXB); // ✅ Vue sẽ theo dõi được
+                nxbs.value[index] = { ...updatedNXB }; // ✅ Thay đổi id thành _id
             }
             showNotification('Cập nhật thành công!', 'success');
             closeDrawer();
@@ -155,6 +155,21 @@ const validateForm = () => {
     }
 
     return Object.keys(errors.value).length === 0;
+};
+// ✅ Định nghĩa nhiều quy tắc cho từng trường
+const rules = {
+    MaNXB: [
+        value => !!value || 'Vui lòng nhập mã NXB',
+        value => /^[A-Za-z0-9]+$/.test(value) || 'Mã NXB chỉ chứa chữ và số'
+    ],
+    TenNXB: [
+        value => !!value || 'Vui lòng nhập tên NXB',
+        value => value.length >= 3 || 'Tên NXB phải có ít nhất 3 ký tự'
+    ],
+    DiaChi: [
+        value => !!value || 'Vui lòng nhập địa chỉ',
+        value => value.length >= 5 || 'Địa chỉ phải có ít nhất 5 ký tự'
+    ]
 };
 const exportExcel = () => {
     const data = nxbs.value.map((nxb) => {
@@ -196,18 +211,20 @@ const columns = [
     <Drawer
         title="Cập nhật NXB" 
         :visible="isDrawerVisible" 
-        :nxb="selectedNXB" 
+        :object="selectedNXB" 
+        :columns="columns"
+        :rules="rules"
         @close="closeDrawer" 
         @save="saveNXB"
     >
-        <template v-slot="{ editedNXB, errors }">  <!-- ✅ Nhận slot props -->
+        <template v-slot="{ editedObject, errors }">  <!-- ✅ Nhận slot props -->
             <div class="mb-3">
                 <label for="nxbMaNXB" class="form-label">Mã NXB:</label>
                 <input 
                     type="text" 
                     class="form-control" 
                     id="nxbMaNXB" 
-                    v-model="editedNXB.MaNXB" 
+                    v-model="editedObject.MaNXB" 
                     :class="{ 'is-invalid': errors.MaNXB }"
                 >
                 <div v-if="errors.MaNXB" class="invalid-feedback">{{ errors.MaNXB }}</div>
@@ -218,7 +235,7 @@ const columns = [
                     type="text" 
                     class="form-control" 
                     id="nxbName" 
-                    v-model="editedNXB.TenNXB"
+                    v-model="editedObject.TenNXB"
                     :class="{ 'is-invalid': errors.TenNXB }"
                 >
                 <div v-if="errors.TenNXB" class="invalid-feedback">{{ errors.TenNXB }}</div>
@@ -229,7 +246,7 @@ const columns = [
                     type="text" 
                     class="form-control" 
                     id="nxbAddress" 
-                    v-model="editedNXB.DiaChi"
+                    v-model="editedObject.DiaChi"
                     :class="{ 'is-invalid': errors.DiaChi }"
                 >
                 <div v-if="errors.DiaChi" class="invalid-feedback">{{ errors.DiaChi }}</div>
@@ -239,7 +256,7 @@ const columns = [
 
     <!-- ✅ Modal Component -->
     <ModalCreate 
-        :title="'Thêm NXB'" 
+        title="Thêm NXB" 
         :visible="showModal" 
         @close="handleCloseModal"
     >

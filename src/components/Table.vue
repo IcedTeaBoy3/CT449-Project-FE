@@ -56,7 +56,14 @@ const toggleSelectItem = (id) => {
                             @change="toggleSelectItem(item._id)"
                         >
                     </td>
-                    <td v-for="col in columns" :key="col.key">{{ item[col.key] }}</td>
+                    <td v-for="col in columns" :key="col.key">
+                        <template v-if="col.type == 'image'">
+                            <img :src="item[col.key]" alt="Ảnh" class="img-thumbnail" width="50" height="50">
+                        </template>
+                        <template v-else>
+                            {{ item[col.key] }}
+                        </template>
+                    </td>
                     <td>
                         <button class="btn btn-primary btn-sm me-1" @click="$emit('edit', item)">
                             <i class="bi bi-pencil-square"></i> Sửa
@@ -67,7 +74,7 @@ const toggleSelectItem = (id) => {
                     </td>
                 </tr>
                 <tr v-if="items?.length === 0">
-                    <td colspan="6" class="text-center text-secondary">Không có dữ liệu</td>
+                    <td colspan="8" class="text-center text-secondary">Không có dữ liệu</td>
                 </tr>
             </tbody>
         </table>
