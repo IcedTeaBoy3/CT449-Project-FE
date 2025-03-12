@@ -1,10 +1,12 @@
 <script setup>
-import { ref } from "vue";
 import { defineProps } from "vue";
+import { useProductStore } from "../stores/ProductStore";
+import { convertPrice } from "../utils/convertPrice";
 
 const props = defineProps({
     product: Object,
 });
+const productStore = useProductStore();
 
 </script>
 
@@ -12,15 +14,33 @@ const props = defineProps({
 <template>
     
     <div class="col-md-3 pe-0 mb-3">
-        <router-link :to="'/product-detail/' + product._id">
+        <router-link :to="'/product-detail/' + product._id" class="text-decoration-none">
             <div class="card">
-                <img :src="product.HinhAnh" class="card-img-top" alt="Ảnh sách" v-if="product.HinhAnh" />
+                <img 
+                :src="product.HinhAnh" 
+                class="card-img-top" 
+                alt="Ảnh sách" 
+                v-if="product.HinhAnh" 
+                />
                 <div class="card-body">
-                    <h5 class="card-title">{{ product.TenSach }}</h5>
-                    <p class="card-text"><strong>Tác giả:</strong> {{ product.TacGia }}</p>
-                    <p class="card-text"><strong>Thể loại:</strong> {{ product.TheLoai }}</p>
-                    <p class="card-text"><strong>Số quyển:</strong> {{ product.SoQuyen }}</p>
-                    <p class="card-text"><strong>Giá:</strong> {{ product.DonGia.toLocaleString() }} VNĐ</p>
+                    <h5 class="
+                        card-title 
+                        text-primary 
+                        
+                        text-decoration-underline
+                        text-capitalize 
+                        mb-3">
+                        {{ product.TenSach }}
+                    </h5>
+                    
+                    <div>
+                        <p class="mb-1"><strong>Tác giả</strong> {{ product.TacGia }}</p>
+                        <p class="mb-1"><strong>Thể loại:</strong> {{ product.TheLoai }}</p>
+                        <p class="mb-1"><strong>Số quyển:</strong> <span class="badge bg-success">{{ product.SoQuyen }} cuốn</span></p>
+                        <p class="mb-1 price text-danger">
+                           Giá: <span class="fw-bold">{{ convertPrice(product.DonGia)}}</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </router-link>
@@ -33,6 +53,7 @@ const props = defineProps({
     height: 200px;
     object-fit: cover;
 }
+
 .card {
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }

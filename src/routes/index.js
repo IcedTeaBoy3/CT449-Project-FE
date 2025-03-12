@@ -7,6 +7,7 @@ import NotFoundPage from '../pages/NotFoundPage.vue';
 import AdminNXBPage from '../pages/AdminNXBPage.vue';
 import HomePage from '../pages/HomePage.vue';
 import ProductDetailPage from '../pages/ProductDetailPage.vue';
+import SignInPage from '../pages/SignInPage.vue';
 // Định nghĩa các route
 const routes = [
   {
@@ -36,6 +37,12 @@ const routes = [
   {
     path: '/product-detail/:id',
     component: ProductDetailPage,
+    props: true,
+  },
+  {
+    path: '/sign-in',
+    component: SignInPage,
+    meta: { hideLayout: true } // Trang đăng nhập sẽ ẩn Header & Footer
   },
 
   {

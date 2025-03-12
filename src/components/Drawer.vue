@@ -111,7 +111,7 @@ const validateForm = () => {
 }
 
 .drawer {
-    width: 500px;
+    width: 50%;
     height: 100%;
     background: #fff;
     display: flex;

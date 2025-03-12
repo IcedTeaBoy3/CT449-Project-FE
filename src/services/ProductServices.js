@@ -8,6 +8,15 @@ export const getAllProducts = async () => {
         console.error(error);
     }
 }
+export const getDetailProduct = async (id) => {
+    try{
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/get-product-detail/${id}`);
+        return response.data;
+    }
+    catch(error){
+        console.error(error);
+    }
+}
 export const deleteProduct = async (id) => {
     try{
         const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/products/delete-product/${id}`);

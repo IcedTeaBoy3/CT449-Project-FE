@@ -187,7 +187,7 @@ const handleSaveProduct = async (editedProduct) => {
 
 // hàm validate form tạo mới sách
 const validateForm = () => {
-    errors.value = [];
+
     let isValid = true;
     if(!newProduct.value.MaSach.trim()){
         errors.value.MaSach = 'Vui lòng nhập mã sách';
@@ -246,6 +246,14 @@ const validateForm = () => {
         errors.value.MaNXB = 'Vui lòng nhập mã NXB';
         isValid = false;
     }
+    if(!newProduct.value.TheLoai.trim()){
+        errors.value.TheLoai="Vui lòng nhập vào thể loại"
+        isValid = false;
+    }
+    if(!newProduct.value.HinhAnh.trim()){
+        errors.value.HinhAnh="Vui lòng nhập vào hình ảnh"
+        isValid= false;
+    }
     return isValid;
 };
 const handleFileUpload = (event) => {
@@ -271,16 +279,9 @@ const handleUpdateFileUpload = (event) => {
     const file = event.target.files[0]; // Lấy file đầu tiên
     
     if (file) {
-    // Kiểm tra loại file
-        if (!file.type.startsWith("image/")) {
-            errors.value.HinhAnh = "Vui lòng chọn file ảnh"; // Thông báo lỗi
-            return;
-        }
         const reader = new FileReader();
         reader.readAsDataURL(file);
         
-        // Xóa thông báo lỗi
-        errors.value.HinhAnh = "";
         reader.onload = () => {
             selectedProduct.value.HinhAnh = reader.result;
         };
@@ -353,6 +354,12 @@ const rules = {
     ],
     MaNXB: [
         value => !!value || 'Vui lòng chọn nhà xuất bản'
+    ],
+    TheLoai: [
+        value => !!value || 'Vui lòng nhập vào thể loại'
+    ],
+    HinhAnh: [
+        // value => !!value.startsWith("image/") || "Vui lòng chọn hình ảnh hợp lệ"
     ]
 };
 </script>
