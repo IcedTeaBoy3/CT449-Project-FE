@@ -71,7 +71,7 @@ const handleLogout = () => {
           <ul class="dropdown-menu">
             <li><router-link to="/profile" class="dropdown-item">Thông tin cá nhân</router-link></li>
             <li><router-link to="/my-books" class="dropdown-item">Sách đã mượn</router-link></li>
-            <li><router-link to="/admin" class="dropdown-item">Quản lý hệ thống</router-link></li>
+            <li v-if="user?.isAdmin"><router-link to="/admin" class="dropdown-item">Quản lý hệ thống</router-link></li>
             <li class="dropdown-item" @click="handleLogout">Đăng xuất</li>
           </ul>
         </div>

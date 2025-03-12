@@ -57,15 +57,19 @@ const toggleSelectItem = (id) => {
                         >
                     </td>
                     <td v-for="col in columns" :key="col.key">
-                        <template v-if="col.type == 'image'">
-                            <img :src="item[col.key]" alt="Ảnh" class="img-thumbnail" width="50" height="50">
+                        <template v-if="col.type === 'image'">
+                            <img :src="item[col.key] || 'default.jpg'" alt="Ảnh" class="img-thumbnail" width="50" height="50">
+                        </template>
+                        <template v-else-if="col.type === 'boolean'">
+                            <span>{{ item[col.key] ? 'Admin' : 'User' }}</span>
                         </template>
                         <template v-else>
-                            {{ item[col.key] }}
+                            {{ item[col.key] ?? 'N/A' }}
                         </template>
                     </td>
                     <td>
-                        <button class="btn btn-primary btn-sm me-1" @click="$emit('edit', item)">
+
+                        <button class="btn btn-primary btn-sm me-1" @click="$emit('edit', item)" v-if="!item.Email">
                             <i class="bi bi-pencil-square"></i> Sửa
                         </button>
                         <button class="btn btn-danger btn-sm" @click="$emit('delete', item._id)">
@@ -80,7 +84,7 @@ const toggleSelectItem = (id) => {
         </table>
         <div class="d-flex justify-content-start">
             <button class="btn btn-danger" :disabled="selectedIds.length === 0" @click="$emit('deleteMany', selectedIds)">
-                <i class="bi bi-trash3"></i> Xóa nhiều
+                <i class="bi bi-trash3"></i> Xóa tất cả
             </button>
         </div>
     </div>

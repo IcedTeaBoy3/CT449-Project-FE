@@ -296,7 +296,8 @@ const exportExcel = () => {
             SoQuyen: product.SoQuyen,
             NamXuatBan: product.NamXuatBan,
             TacGia: product.TacGia,
-            MaNXB: product.MaNXB
+            MaNXB: product.MaNXB,
+            TheLoai: product.TheLoai,
         };
     });
 

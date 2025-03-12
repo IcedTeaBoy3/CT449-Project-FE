@@ -6,6 +6,7 @@ import * as UserService from '@/services/UserService'; // Import API service
 import NotificationComponent from '@/components/NotificationComponent.vue';
 // import * as UserServices from '@/services/UserService';
 import Swal from "sweetalert2";
+import { computed } from 'vue';
 
 import * as jwtdecode from "jwt-decode";
 
@@ -14,6 +15,7 @@ const email = ref('');
 const password = ref('');
 const isShowPassword = ref(false);
 const userStore = useUserStore();
+const user = computed(() => userStore.getUser);
 const router = useRouter();
 const errors = ref({});
 const showSuccessAlert = () => {
@@ -24,7 +26,10 @@ const showSuccessAlert = () => {
     timer: 2000, // 2 giây
     showConfirmButton: false,
   }).then(() => {
-    // Chuyển hướng sau khi thông báo tắt
+    if(user.value?.isAdmin){
+      router.push("/admin");
+      return;
+    }
     router.push("/");
   });
 };
@@ -51,7 +56,6 @@ const handleLogin = async () => {
         if (response?.status === 'success') {
             // Lưu thông tin user vào store
             const access_token = response.access_token;
-            userStore.setUser({access_token: access_token});
             if(access_token){
                 const decodedToken = jwtdecode.jwtDecode(access_token);
                 const {id, exp } = decodedToken;
@@ -61,7 +65,7 @@ const handleLogin = async () => {
                 }
                 const userDetail = await UserService.getUserDetail(access_token,id);
                 if(userDetail.status === 'success'){
-                    userStore.setUser(userDetail.data);
+                    userStore.setUser({...userDetail.data, access_token});
                     showSuccessAlert(); // Hiển thị thông báo và chuyển trang
                 }
                 
@@ -92,19 +96,32 @@ const handleLogin = async () => {
   
         <div class="form-group">
             <label for="email" class="form-label fw-bold" ><i class="bi bi-envelope-fill"></i> Email</label>
-            <input type="text" id="email" v-model="email" placeholder="Nhập email của bạn" />
-            <span class="text-danger" v-if="errors.email">* {{ errors.email }}</span>
+            <input 
+                type="text" 
+                id="email" 
+                v-model="email" 
+                placeholder="Nhập email của bạn"
+                :class="{ 'is-invalid': errors.email }"
+            />
+            <span class="text-danger fw-bold" v-if="errors.email">* {{ errors.email }}</span>
         </div>
   
         <div class="form-group">
             <label for="password" class="form-label fw-bold"><i class="bi bi-lock-fill text-warning"></i> Mật khẩu</label>
             <div class="password-wrapper">
-                <input :type="isShowPassword ? 'text' : 'password'" id="password" v-model="password" placeholder="Nhập mật khẩu" />
+                <input 
+                    :type="isShowPassword ? 'text' : 'password'" 
+                    id="password" 
+                    v-model="password"
+                    placeholder="Nhập mật khẩu"
+                    :class="{ 'is-invalid': errors.password }"
+                    
+                />
                     <button type="button" @click="isShowPassword = !isShowPassword">
                     <i :class="isShowPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye'"></i>
                 </button>
             </div>
-            <span class="text-danger" v-if="errors.password">* {{ errors.password }}</span>
+            <span class="text-danger fw-bold" v-if="errors.password">* {{ errors.password }}</span>
         </div>
 
         <span>Nếu chưa có tài khoản <strong class="text-decoration-underline">Đăng ký</strong></span>
