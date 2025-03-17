@@ -47,3 +47,16 @@ export const deleteUser = async (userId,access_token) => {
         console.error(error);
     }
 }
+export const updateUser = async (userId,data,access_token) => {
+    try{
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/users/update-user/${userId}`,data,{
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        });
+        return response.data;
+    }
+    catch(error){
+        console.error(error);
+    }
+}

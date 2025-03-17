@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import Drawer from '../components/Drawer.vue';
 
+
 // Biến products lưu danh sách sách
 const products = ref([]);
 // Biến nxb lưu danh sách nhà xuất bản
@@ -50,6 +51,7 @@ const selectedProduct = ref({});
 
 
 onMounted(async () => {
+    document.title = 'Quản lý sách';
     const response = await ProductService.getAllProducts();
     if(response?.data){
         products.value = response?.data || [];
@@ -167,11 +169,8 @@ const handleCloseDrawer = () => {
 const handleSaveProduct = async (editedProduct) => {
     try{
         const {_id, ...data} = editedProduct;
-        // console.log(editedProduct);
         
-        const result = await ProductService.updateProduct(_id, data);
-        
-        
+        const result = await ProductService.updateProduct(_id, data);   
         if(result.status === 'success'){
             const index = products.value.findIndex((product) => product._id === _id);
             if(index !== -1){
@@ -363,6 +362,7 @@ const rules = {
         // value => !!value.startsWith("image/") || "Vui lòng chọn hình ảnh hợp lệ"
     ]
 };
+
 </script>
 
 <template>

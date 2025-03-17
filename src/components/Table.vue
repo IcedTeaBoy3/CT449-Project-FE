@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
+// import Paginate from "vue3-pagination"; // ✅ Import đúng
+import { convertDate } from '../utils/convertDate';
 
 // Nhận props
 const props = defineProps({
@@ -7,7 +9,7 @@ const props = defineProps({
     columns: Array // Danh sách các cột (label và key)
 });
 
-const emit = defineEmits(['edit', 'delete','deleteMany']);
+const emit = defineEmits(['edit', 'delete','deleteMany','approve']);
 
 // Danh sách các ID được chọn
 const selectedIds = ref([]);
@@ -33,6 +35,17 @@ const toggleSelectItem = (id) => {
         selectedIds.value.splice(index, 1);
     }
 };
+// Phân trang
+
+const currentPage = ref(1);
+const itemsPerPage = 5;
+
+const paginatedItems = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage;
+    return props.items.slice(start, start + itemsPerPage);
+});
+
+const totalPages = computed(() => Math.ceil(props.items.length / itemsPerPage));
 </script>
 
 <template>
@@ -48,7 +61,7 @@ const toggleSelectItem = (id) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in items" :key="item._id">
+                <tr v-for="item in paginatedItems" :key="item._id">
                     <td>
                         <input 
                             type="checkbox" 
@@ -63,14 +76,23 @@ const toggleSelectItem = (id) => {
                         <template v-else-if="col.type === 'boolean'">
                             <span>{{ item[col.key] ? 'Admin' : 'User' }}</span>
                         </template>
+                        <template v-else-if="col.type === 'Date'">
+                            <span>{{ convertDate(item[col.key]) }}</span>
+                        </template>
                         <template v-else>
                             {{ item[col.key] ?? 'N/A' }}
                         </template>
                     </td>
                     <td>
-
-                        <button class="btn btn-primary btn-sm me-1" @click="$emit('edit', item)" v-if="!item.Email">
+                        <button class="btn btn-primary btn-sm me-1" @click="$emit('edit', item)" v-if="!item.TrangThai">
                             <i class="bi bi-pencil-square"></i> Sửa
+                        </button>
+
+                        <button 
+                            class="btn btn-primary btn-sm me-1" 
+                            v-if="item.TrangThai" @click="$emit('approve',item._id)"
+                            :disabled="item.TrangThai !== 'Chờ xác nhận'" 
+                        >Duyệt
                         </button>
                         <button class="btn btn-danger btn-sm" @click="$emit('delete', item._id)">
                             <i class="bi bi-trash3"></i> Xóa
@@ -80,6 +102,14 @@ const toggleSelectItem = (id) => {
                 <tr v-if="items?.length === 0">
                     <td colspan="8" class="text-center text-secondary">Không có dữ liệu</td>
                 </tr>
+                <Paginate
+                    v-model="currentPage"
+                    :page-count="totalPages"
+                    :prev-text="'Trước'"
+                    :next-text="'Tiếp'"
+                    :container-class="'pagination'"
+                />
+
             </tbody>
         </table>
         <div class="d-flex justify-content-start">

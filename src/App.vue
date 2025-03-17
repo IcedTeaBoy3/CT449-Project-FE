@@ -7,7 +7,7 @@ const route = useRoute();
 
 <template>
   <div>
-    <HeaderComponent v-if="!route.meta.hideLayout"/>
+    <HeaderComponent v-if="!route.meta.hideLayout" :hideSearch="true"/>
     <router-view />
     <FooterComponent v-if="!route.meta.hideLayout" />
   </div>

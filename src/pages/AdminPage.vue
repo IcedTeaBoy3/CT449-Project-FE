@@ -18,6 +18,9 @@ import MenuComponent from '../components/MenuComponent.vue';
                     <li>
                         <router-link to="/admin/nxb" class="menu-link" active-class="active"><i class="bi bi-building"></i> Quản lý NXB</router-link>
                     </li>
+                    <li>
+                        <router-link to="/admin/borrow-books" class="menu-link" active-class="active"><i class="bi bi-journal-check"></i> Quản lý mượn sách</router-link>
+                    </li>
                 </MenuComponent>
             </div>
             <div class="col-8 col-md-10 bg-light p-0">

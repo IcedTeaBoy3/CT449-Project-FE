@@ -5,6 +5,11 @@ import { useUserStore } from '../stores/userStore';
 import { computed } from 'vue';
 import Swal from 'sweetalert2';
 import router from '../routes';
+import { defineProps } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
+
 // const avatarUrl = '/logo.png';
 const productStore = useProductStore();
 const searchQuery = ref(''); 
@@ -36,10 +41,10 @@ const handleLogout = () => {
       <!-- Logo và Tên Website -->
       <router-link to="/" class="navbar-brand d-flex align-items-center">
         <img src="/logo.png" alt="Vue logo" class="logo" />
-        <span class="brand-text">Thư viện Online</span>
+        <span class="brand-text">Mượn Sách Online</span>
       </router-link>
       <!-- input tìm kiếm -->
-      <div class="col-md-6">
+      <div class="col-md-6" v-if="route.path == '/'">
         <div class="input-group">
           <input 
             type="text" 
@@ -70,7 +75,7 @@ const handleLogout = () => {
           <!-- Dropdown Menu -->
           <ul class="dropdown-menu">
             <li><router-link to="/profile" class="dropdown-item">Thông tin cá nhân</router-link></li>
-            <li><router-link to="/my-books" class="dropdown-item">Sách đã mượn</router-link></li>
+            <li><router-link to="/my-borrow-books" class="dropdown-item">Sách đã mượn</router-link></li>
             <li v-if="user?.isAdmin"><router-link to="/admin" class="dropdown-item">Quản lý hệ thống</router-link></li>
             <li class="dropdown-item" @click="handleLogout">Đăng xuất</li>
           </ul>

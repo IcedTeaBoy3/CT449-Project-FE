@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '@/stores/userStore'; // Import Pinia store
-import { useRouter } from 'vue-router';
+import { useRouter,useRoute } from 'vue-router';
 import * as UserService from '@/services/UserService'; // Import API service
 import NotificationComponent from '@/components/NotificationComponent.vue';
 // import * as UserServices from '@/services/UserService';
@@ -16,6 +16,7 @@ const password = ref('');
 const isShowPassword = ref(false);
 const userStore = useUserStore();
 const user = computed(() => userStore.getUser);
+const route = useRoute();
 const router = useRouter();
 const errors = ref({});
 const showSuccessAlert = () => {
@@ -26,11 +27,8 @@ const showSuccessAlert = () => {
     timer: 2000, // 2 giây
     showConfirmButton: false,
   }).then(() => {
-    if(user.value?.isAdmin){
-      router.push("/admin");
-      return;
-    }
-    router.push("/");
+    const redirectPath = route.query.redirect || "/"; // Nếu không có trang trước, về trang chủ
+    router.push(redirectPath);
   });
 };
 onMounted(() => {

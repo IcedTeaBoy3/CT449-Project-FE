@@ -8,5 +8,6 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, 'src') // Định nghĩa alias @ trỏ đến thư mục src
     }
-  }
+  },
+
 })
