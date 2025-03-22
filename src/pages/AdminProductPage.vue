@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import * as ProductService from '../services/ProductServices';
 import * as NBXService from '../services/NXBService';
 import ConfirmDialog from '../components/ConfirmDialog.vue';
@@ -9,10 +9,26 @@ import ModalCreate from '../components/ModalCreate.vue';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import Drawer from '../components/Drawer.vue';
+// import InputSearch from '../components/InputSearch.vue';
+import { useProductStore } from '../stores/ProductStore';
 
+
+const productStore = useProductStore();
 
 // Biến products lưu danh sách sách
+
 const products = ref([]);
+onMounted(async () => {
+    document.title = 'Quản lý sách';
+    try{
+        const response = await ProductService.getAllProducts();
+        if(response?.data){
+            products.value = response.data;
+        }
+    } catch(error){
+        console.error('Lỗi khi lấy danh sách sách:', error);
+    }
+});
 // Biến nxb lưu danh sách nhà xuất bản
 const nxbs = ref([]);
 // Hiển thị hộp thoại xác nhận
@@ -49,14 +65,6 @@ const isDrawerVisible = ref(false);
 // Lưu thông tin Sách đang được chọn
 const selectedProduct = ref({});
 
-
-onMounted(async () => {
-    document.title = 'Quản lý sách';
-    const response = await ProductService.getAllProducts();
-    if(response?.data){
-        products.value = response?.data || [];
-    } // ✅ Nếu không có dữ liệu thì gán mảng rỗng
-});
 // Hiển thị thông báo trong 3 giây
 const showNotification = (message, type) => {
     notification.value = { message, type, visible: true };
@@ -68,8 +76,11 @@ const showNotification = (message, type) => {
 const handleConfirmDelete = async () => {
     try{
         const result = await ProductService.deleteProduct(comfirmDialog.value.id);
-        if(result?.data){
+        if(result?.status === 'success'){
             products.value = products.value.filter((product) => product._id !== comfirmDialog.value.id);
+            handleCancelDelete();
+            showNotification(result.message, result.status);
+        }else{
             handleCancelDelete();
             showNotification(result.message, result.status);
         }
@@ -286,6 +297,7 @@ const handleUpdateFileUpload = (event) => {
         };
     }
 }
+
 const exportExcel = () => {
     const data = products.value.map((product) => {
         return {
@@ -362,6 +374,7 @@ const rules = {
         // value => !!value.startsWith("image/") || "Vui lòng chọn hình ảnh hợp lệ"
     ]
 };
+
 
 </script>
 
@@ -632,11 +645,11 @@ const rules = {
     </Drawer>
     <div class="p-3">
         <h4 class="fw-bold mb-3 border-bottom border-primary text-capitalize">Quản lý sách</h4>
-        <div class="d-flex justify-content-between">
-            <button class="btn btn-primary mb-3" @click="showCreateModal">
+        <div class="d-flex justify-content-between mb-3">
+            <button class="btn btn-primary" @click="showCreateModal">
                 <i class="bi bi-plus-lg"></i> Thêm sách
             </button>
-            <button class="btn btn-success mb-3" @click="exportExcel">
+            <button class="btn btn-success " @click="exportExcel">
                 <i class="bi bi-plus-lg"></i> Xuất Excel
             </button>
         </div>

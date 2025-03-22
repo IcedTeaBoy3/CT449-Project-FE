@@ -17,6 +17,10 @@ export const useProductStore = defineStore("productStore", {
             const publisher = state.nxbs.find(nxb => nxb.MaNXB === id);
             return publisher ? publisher.TenNXB : "Tất cả";
         },
+        // lấy ra số lượng sản phẩm
+        productCount: (state) => state.products.length,
+        // lấy ra số lượng nhà xuất bản
+        publisherCount: (state) => state.nxbs.length,
         
         // Lấy ra sản phẩm theo mã sản phẩm
 

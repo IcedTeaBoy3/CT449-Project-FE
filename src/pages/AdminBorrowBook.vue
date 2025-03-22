@@ -23,13 +23,13 @@ onMounted(async () => {
     document.title = 'Quản lý mượn sách';
     try{
         const response = await BorrowBookService.getAllBorrowBookAdmin(user?.access_token)
-        if(response.status == "success"){
-            allBorrowBooks.value = response.data.map((item) => {
+        if(response?.status == "success"){
+            allBorrowBooks.value = response?.data.map((item) => {
                 return {
                     _id: item._id,
-                    TenDocGia: item.MaDocGia.FullName,
-                    HinhAnh: item.MaSach.HinhAnh,
-                    TenSach: item.MaSach.TenSach,
+                    TenDocGia: item?.MaDocGia?.FullName,
+                    HinhAnh: item?.MaSach?.HinhAnh,
+                    TenSach: item?.MaSach?.TenSach,
                     NgayMuon: item.NgayMuon,
                     NgayTra: item.NgayTra,
                     TrangThai: item.TrangThai,
@@ -37,7 +37,7 @@ onMounted(async () => {
             })
         }
     }catch(error){
-
+        console.error('Lỗi khi lấy thông tin mượn sách:', error);
     }
 })
 

@@ -35,17 +35,7 @@ const toggleSelectItem = (id) => {
         selectedIds.value.splice(index, 1);
     }
 };
-// Phân trang
 
-const currentPage = ref(1);
-const itemsPerPage = 5;
-
-const paginatedItems = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    return props.items.slice(start, start + itemsPerPage);
-});
-
-const totalPages = computed(() => Math.ceil(props.items.length / itemsPerPage));
 </script>
 
 <template>
@@ -61,7 +51,7 @@ const totalPages = computed(() => Math.ceil(props.items.length / itemsPerPage));
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in paginatedItems" :key="item._id">
+                <tr v-for="item in items" :key="item._id">
                     <td>
                         <input 
                             type="checkbox" 
@@ -92,7 +82,7 @@ const totalPages = computed(() => Math.ceil(props.items.length / itemsPerPage));
                             class="btn btn-primary btn-sm me-1" 
                             v-if="item.TrangThai" @click="$emit('approve',item._id)"
                             :disabled="item.TrangThai !== 'Chờ xác nhận'" 
-                        >Duyệt
+                        ><i class="bi bi-check-circle"></i> Duyệt
                         </button>
                         <button class="btn btn-danger btn-sm" @click="$emit('delete', item._id)">
                             <i class="bi bi-trash3"></i> Xóa
@@ -102,13 +92,6 @@ const totalPages = computed(() => Math.ceil(props.items.length / itemsPerPage));
                 <tr v-if="items?.length === 0">
                     <td colspan="8" class="text-center text-secondary">Không có dữ liệu</td>
                 </tr>
-                <Paginate
-                    v-model="currentPage"
-                    :page-count="totalPages"
-                    :prev-text="'Trước'"
-                    :next-text="'Tiếp'"
-                    :container-class="'pagination'"
-                />
 
             </tbody>
         </table>

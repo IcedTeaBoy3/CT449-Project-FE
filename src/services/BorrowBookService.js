@@ -71,3 +71,15 @@ export const deleteBorrowBook = async (access_token,id) => {
         console.error(error);
     }
 }
+export const countBorrowBook = async (access_token) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/borrow-books/count-borrow-book`,{
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}

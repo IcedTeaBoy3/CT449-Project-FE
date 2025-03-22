@@ -50,8 +50,7 @@ const handleBorrowBook = async (productDetail) => {
       title: "Bạn chưa đăng nhập!",
       text: "Vui lòng đăng nhập để mượn sách.",
       icon: "warning",
-      timer: 2000, // 2 giây
-      showConfirmButton: false,
+      showConfirmButton: true,
     }).then(() => {
       router.push({
         path: "/sign-in",
@@ -60,22 +59,33 @@ const handleBorrowBook = async (productDetail) => {
     });
   }
   else if (productDetail.SoQuyen > 0) {
-    const response = await BorrowBookService.createBorrowBook(userStore.getUser.access_token,{ 
-      MaSach: productDetail._id,
-      MaDocGia: userStore.getUser._id,
-      NgayMuon: new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }),
-      NgayTra: '',
-      TrangThai: 'Chờ xác nhận'
+    Swal.fire({
+      title: "Xác nhận mượn sách?",
+      text: "Bạn có chắc chắn muốn mượn sách này?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Mượn sách",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await BorrowBookService.createBorrowBook(userStore.getUser.access_token,{ 
+          MaSach: productDetail._id,
+          MaDocGia: userStore.getUser._id,
+          NgayMuon: new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }),
+          NgayTra: '',
+          TrangThai: 'Chờ xác nhận'
+        });
+        if(response.status === 'success'){
+          // Giảm số lượng trên giao diện ngay lập tức
+          productDetail.SoQuyen -= 1;
+          showNotification(response.message, response.status);
+        } else {
+          // Nếu lỗi xảy ra, khôi phục lại số lượng sách
+          productDetail.SoQuyen += 1;
+          showNotification(response.message, response.status);
+        }
+      }
     });
-    if(response.status === 'success'){
-      // Giảm số lượng trên giao diện ngay lập tức
-      productDetail.SoQuyen -= 1;
-      showNotification(response.message, response.status);
-    } else {
-      // Nếu lỗi xảy ra, khôi phục lại số lượng sách
-      productDetail.SoQuyen += 1;
-      showNotification(response.message, response.status);
-    }
   } else {
     showNotification('Sách đã hết', 'error');
   }

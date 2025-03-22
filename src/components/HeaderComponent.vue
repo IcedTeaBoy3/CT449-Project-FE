@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import router from '../routes';
 import { defineProps } from 'vue';
 import { useRoute } from 'vue-router';
+import InputSearch from './InputSearch.vue';
 const route = useRoute();
 
 
@@ -15,20 +16,17 @@ const productStore = useProductStore();
 const searchQuery = ref(''); 
 const userStore = useUserStore();
 const user = computed(() => userStore.getUser); // ✅ Dùng computed để lấy getter từ store
-const handleOnChangeSearchQuery = () => {
-  productStore.setSearchQuery(searchQuery.value);
+const handleOnChangeSearchQuery = (searchValue) => {
+  productStore.setSearchQuery(searchValue);
 };
+
 const showSuccessAlert = () => {
   Swal.fire({
     title: "Đăng xuất thành công!",
-    text: "Bạn sẽ được chuyển hướng về trang đăng nhập.",
     icon: "success",
     timer: 2000, // 2 giây
     showConfirmButton: false,
-  }).then(() => {
-    // Chuyển hướng sau khi thông báo tắt
-    router.push("/sign-in");
-  });
+  })
 };
 const handleLogout = () => {
   userStore.logOut();
@@ -45,18 +43,7 @@ const handleLogout = () => {
       </router-link>
       <!-- input tìm kiếm -->
       <div class="col-md-6" v-if="route.path == '/'">
-        <div class="input-group">
-          <input 
-            type="text" 
-            class="form-control" 
-            placeholder="Tìm kiếm..." 
-            @input="handleOnChangeSearchQuery"
-            v-model="searchQuery"
-          />
-          <button class="btn btn-primary" type="button">
-            <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
-          </button>
-        </div>
+        <InputSearch @search="handleOnChangeSearchQuery" />
       </div>
 
 

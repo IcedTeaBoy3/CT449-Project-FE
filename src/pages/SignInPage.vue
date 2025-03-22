@@ -3,8 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useUserStore } from '@/stores/userStore'; // Import Pinia store
 import { useRouter,useRoute } from 'vue-router';
 import * as UserService from '@/services/UserService'; // Import API service
-import NotificationComponent from '@/components/NotificationComponent.vue';
-// import * as UserServices from '@/services/UserService';
+
 import Swal from "sweetalert2";
 import { computed } from 'vue';
 
@@ -122,7 +121,7 @@ const handleLogin = async () => {
             <span class="text-danger fw-bold" v-if="errors.password">* {{ errors.password }}</span>
         </div>
 
-        <span>Nếu chưa có tài khoản <strong class="text-decoration-underline">Đăng ký</strong></span>
+        <span>Nếu chưa có tài khoản <router-link to="/sign-up" class="fw-bold">Đăng ký</router-link></span>
         <button type="submit" class="button-submit">Đăng nhập</button>
       </form>
     </div>

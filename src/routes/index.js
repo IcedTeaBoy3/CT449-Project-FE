@@ -8,6 +8,7 @@ import AdminNXBPage from '../pages/AdminNXBPage.vue';
 import HomePage from '../pages/HomePage.vue';
 import ProductDetailPage from '../pages/ProductDetailPage.vue';
 import SignInPage from '../pages/SignInPage.vue';
+import SignUpPage from '../pages/SignUpPage.vue';
 import { useUserStore } from '../stores/userStore';
 import MyBorrowBooks from '../pages/MyBorrowBooks.vue';
 import AdminBorrowBook from '../pages/AdminBorrowBook.vue';
@@ -50,6 +51,11 @@ const routes = [
   {
     path: '/sign-in',
     component: SignInPage,
+    meta: { hideLayout: true } // Trang đăng nhập sẽ ẩn Header & Footer
+  },
+  {
+    path: '/sign-up',
+    component: SignUpPage,
     meta: { hideLayout: true } // Trang đăng nhập sẽ ẩn Header & Footer
   },
   {

@@ -77,17 +77,17 @@ const handleReturnBook = (id) => {
                             <tr v-for="(borrowBook, index) in borrowBooks" :key="borrowBook._id" class="align-middle">
                                 <td>{{ index + 1 }}</td>
                                 <td style="display: flex; align-items: center;">
-                                    <img :src="borrowBook.MaSach.HinhAnh" alt="Ảnh bìa" style="width: 50px; height: 50px; object-fit: cover;">
+                                    <img :src="borrowBook?.MaSach?.HinhAnh" alt="Ảnh bìa" style="width: 50px; height: 50px; object-fit: cover;">
                                 
                                 </td>
                                 <td>
 
-                                    {{ borrowBook.MaSach.TenSach }}
+                                    {{ borrowBook?.MaSach?.TenSach }}
                                 </td>
-                                <td>{{ convertDate(borrowBook.NgayMuon) }}</td>
-                                <td>{{ convertDate(borrowBook.NgayTra) }}</td>
+                                <td>{{ convertDate(borrowBook?.NgayMuon) }}</td>
+                                <td>{{ convertDate(borrowBook?.NgayTra) }}</td>
 
-                                <td>{{ borrowBook.TrangThai }}</td>
+                                <td>{{ borrowBook?.TrangThai }}</td>
                                 <td>
                                     <button 
                                         :disabled="borrowBook.TrangThai !== 'Đã duyệt'" 
