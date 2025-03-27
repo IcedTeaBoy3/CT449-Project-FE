@@ -82,6 +82,30 @@ const handleConfirmDelete = async () => {
 const handleCancelDelete = () => {
     comfirmDialog.value.visible = false;
 };
+
+const exportExcel = () => {
+    const data = allBorrowBooks.value.map((item) => {
+        return {
+            TenDocGia: item.TenDocGia,
+            TenSach: item.TenSach,
+            NgayMuon: item.NgayMuon,
+            NgayTra: item.NgayTra,
+            TrangThai: item.TrangThai,
+        };
+    });
+    // 1. Tạo worksheet từ dữ liệu
+    const ws = XLSX.utils.json_to_sheet(data);
+
+    // 2. Tạo workbook và thêm worksheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Danh_sach_muon_sach');
+
+    // 3. Xuất file
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const file = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(file, 'Danh_sach_muon_sach.xlsx');
+};
+
 const columns = [
     { key: 'TenDocGia', label: 'Người dùng' },
     { key: 'HinhAnh', label: 'Hình ảnh', type: 'image' },
@@ -91,6 +115,7 @@ const columns = [
     { key: 'TrangThai', label: 'Trạng thái' },
 
 ];
+
 </script>
 
 

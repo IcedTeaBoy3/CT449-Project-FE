@@ -9,5 +9,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src') // Định nghĩa alias @ trỏ đến thư mục src
     }
   },
+  define: {
+    'process.env': process.env // Đảm bảo biến môi trường được load
+  }
 
 })

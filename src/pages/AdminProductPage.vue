@@ -416,7 +416,7 @@ const rules = {
                     v-model="newProduct.TenSach" 
                     type="text" 
                     class="form-control" 
-                    placeholder="VD: bóng ma trong bí mật"
+                    placeholder="VD: ông già và biển cả"
                     :class="{ 'is-invalid': errors.TenSach }" 
                 />
                 <div v-if="errors.TenSach" class="invalid-feedback">{{ errors.TenSach }}</div>
@@ -439,7 +439,7 @@ const rules = {
                     v-model="newProduct.SoQuyen" 
                     type="text" 
                     class="form-control" 
-                    placeholder="VD: Cần Thơ" 
+                    placeholder="VD: 20" 
                     :class="{ 'is-invalid': errors.SoQuyen }" 
                 />
                 <div v-if="errors.SoQuyen" class="invalid-feedback">{{ errors.SoQuyen }}</div>
@@ -450,7 +450,7 @@ const rules = {
                     v-model="newProduct.NamXuatBan" 
                     type="text" 
                     class="form-control" 
-                    placeholder="VD: Cần Thơ" 
+                    placeholder="VD: 1952" 
                     :class="{ 'is-invalid': errors.NamXuatBan }" 
                 />
                 <div v-if="errors.NamXuatBan" class="invalid-feedback">{{ errors.NamXuatBan }}</div>
@@ -461,7 +461,7 @@ const rules = {
                     v-model="newProduct.TacGia" 
                     type="text" 
                     class="form-control" 
-                    placeholder="VD: Cần Thơ" 
+                    placeholder="VD: Hemingway" 
                     :class="{ 'is-invalid': errors.TacGia }" 
                 />
                 <div v-if="errors.TacGia" class="invalid-feedback">{{ errors.TacGia }}</div>
@@ -472,7 +472,7 @@ const rules = {
                     v-model="newProduct.TheLoai" 
                     type="text" 
                     class="form-control" 
-                    placeholder="VD: Cần Thơ" 
+                    placeholder="VD: Tiểu thuyết" 
                     :class="{ 'is-invalid': errors.TheLoai }"
                 />
                 <div v-if="errors.TheLoai" class="invalid-feedback">{{ errors.TheLoai }}</div>

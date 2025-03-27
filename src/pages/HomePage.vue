@@ -24,7 +24,6 @@ onMounted(async () => {
             productStore.setProducts(response.data);
         }
         const responsePublisher = await NXBService.getAllNXB();
-        console.log('responsePublisher', responsePublisher);
         
         if (responsePublisher.status === 'success') {
             productStore.setPublishers(responsePublisher.data);

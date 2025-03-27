@@ -8,6 +8,7 @@ export const useUserStore = defineStore("userStore", {
         isAdmin: "",
         Address: "",
         Phone: "",
+        Avatar: "",
         access_token: ""
     }),
     getters: {
@@ -20,7 +21,8 @@ export const useUserStore = defineStore("userStore", {
                 isAdmin: state.isAdmin,
                 Address: state.Address,
                 Phone: state.Phone,
-                access_token: state.access_token
+                access_token: state.access_token,
+                Avatar: state.Avatar
             };
         },
     },
@@ -34,6 +36,7 @@ export const useUserStore = defineStore("userStore", {
             this.Address = user.Address;
             this.Phone = user.Phone;
             this.access_token = user.access_token;
+            this.Avatar = user.Avatar;
         },
         logOut() {
             this._id = "";
@@ -44,6 +47,7 @@ export const useUserStore = defineStore("userStore", {
             this.Address = "";
             this.Phone = "";
             this.access_token = "";
+            this.Avatar = "";
         },
     }
 });

@@ -95,11 +95,6 @@ const toggleSelectItem = (id) => {
 
             </tbody>
         </table>
-        <div class="d-flex justify-content-start">
-            <button class="btn btn-danger" :disabled="selectedIds.length === 0" @click="$emit('deleteMany', selectedIds)">
-                <i class="bi bi-trash3"></i> Xóa tất cả
-            </button>
-        </div>
     </div>
 </template>
 

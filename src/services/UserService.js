@@ -83,3 +83,12 @@ export const countUser = async (access_token) => {
         console.error(error);
     }
 }
+export const loginGoogle = async (code) => {
+    try{
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login-google`, code);
+        return response.data;
+    }
+    catch(error){
+        console.error(error);
+    }
+}

@@ -56,7 +56,9 @@ const handleLogout = () => {
         <div class="dropdown">
           <!-- Avatar và tên người dùng -->
           <button class="btn text-white dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <span>Xin chào, {{ user?.FullName }}</span>
+            <img :src="user?.Avatar" alt="Avatar" class="avatar-img" v-if="user?.Avatar"/>
+            <i class="bi bi-person-circle me-2" v-else style="font-size: 30px;" ></i>
+            <span class="ms-1">{{ user?.FullName }}</span>
           </button>
 
           <!-- Dropdown Menu -->
